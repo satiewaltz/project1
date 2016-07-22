@@ -2,65 +2,104 @@
 (function(){
 $(function(){
 // Start of code
-
-var buttonCounter = 0;
-var counter = 0;
 // file:///Users/satiewaltz/code/project1/index.html
-function enemyMovement(id, position){
-  setInterval(function() {
-    counter += 1;
-    $("#" + id ).css({
-      "margin-left": counter
-    });
-    if (counter >= 300) {
-      counter = 300;
-    }
-  }, 100 / 10);
-}
+
+
+var counter = 0;
+var levelWidth = $(".level").width()
 
 function enemyPosition(id, position){
-  $("#" + id ).css({
-      "margin-top": position
-    });;
+  setInterval(function() {
+    counter += 1 / 50;
+    $("#" + id ).css({
+      "margin-top": position,
+      "margin-left": counter
+    });
+  }, 1);
 }
 
-function Enemy(){
-  this.randomPosition = Math.floor(Math.random() * 100);
-  this.randomID = Math.floor(Math.random() * 1000);
-  this.htmltag = $("<div class='enemy' id=" + this.randomID + ">");
-  this.movement = enemyMovement(this.randomID);
-  this.position = enemyPosition(this.randomID, this.randomPosition)
+function takeDamage(hits) {
+  console.log("Current Enemy Damage: " + hits.numberOfHits);
+  if (hits.numberOfHits === 0) {
+    $(".enemy").remove();
+  } else {
+    hits.numberOfHits -= 1;
+  }
 }
 
-var ah = new Enemy;
-$(".level").append(ah.htmltag);
-
-
-
-function buttonIncret() {
-  buttonCounter += 1;
+function assignUniqueID() {
+  $(".enemy").each(function(index, el) {
+    var randomPosition = Math.floor(Math.random() * 250);
+    var randomNum = Math.floor(Math.random() * 3000);
+    $(el).attr('id', randomNum);
+    enemyPosition(randomNum, randomPosition);
+  });
 }
-var gamePad = navigator.getGamepads()[0];
+
+function Enemy() {
+  this.el = $(".level").append("<div class='enemy'>");
+  this.randomIDgenerator = assignUniqueID();
+  this.numberOfHits = Math.floor(Math.random() * 3);
+  // this.location = enemyPosition(this.randomIDgenerator, this.randomPosition);
+}
+
+var enemyDIV = $("<div>");
+
+
+for (var i = 0; i < 30; i++) {
+  setInterval(function(){
+      var awdo = new Enemy;
+
+    $(".level").append(enemyDIV);
+
+
+      enemyDIV.data('ident', awdo.ident);
+  enemyDIV.data('location', awdo.location);
+  var dataholder = enemyDIV.data();
+  }, 1);
+
+
+}
+// for (var i = 0; i < 3; i++) {
+//   setTimeout(function(){
+//     $(".level").data(new Enemy)
+//   }, 200)
+// }
+// $(".level").append(Enemy);
+// $(".level").append(Enemy);
 
 var prevTimeStamp;
-function getCurrentGamePadState() {
-  requestAnimationFrame(getCurrentGamePadState);
-  var gamePad = navigator.getGamepads()[0];
-  var currTimestamp = gamePad.timestamp;
-  // Comparing the state of the current timestamp
-  // and the previous, to prevent continous button input
-  // from incrementing counter.
-  if (prevTimeStamp != currTimestamp) {
-    if (gamePad.buttons[0].pressed) {
-      buttonIncret();
+var currgamestate;
+
+var gamestate = function() {
+  // if (counter <= (levelWidth - 100)) {
+    currgamestate = requestAnimationFrame(gamestate);
+    var gamePad = navigator.getGamepads()[0];
+    var currTimestamp = gamePad.timestamp;
+    // Comparing the state of the current timestamp
+    // and the previous, to prevent continous button input
+    // from incrementing counter.
+    if (prevTimeStamp != currTimestamp) {
+      if (gamePad.buttons[0].pressed) {
+        takeDamage($('.enemy'));
+      }
     }
-  }
-  if (buttonCounter === 3) {
-    $(".enemy").remove();
-  }
-  prevTimeStamp = currTimestamp;
+    prevTimeStamp = currTimestamp;
+  // } else {
+  //   counter = 3000
+  //   console.log("You lost!");
+  // }
 }
-requestAnimationFrame(getCurrentGamePadState);
+
+// if (requestAnimationFrame(gamestate) === 1) {
+
+    // enemy.attr('id', enemy.data("id"));
+    // console.log(newEnemys)
+    // $(".enemy").attr('id;
+
+// } else {
+  requestAnimationFrame(gamestate)
+// }
 
 // End of code
 })
