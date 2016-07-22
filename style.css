@@ -1,0 +1,21 @@
+.enemy{
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: red;
+}
+
+.block{
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  bottom: 0;
+  margin-left: 300px;
+  background: lightcyan;
+}
+
+.level {
+      position: relative;
+      height: 300px;
+    background: gray;
+}
