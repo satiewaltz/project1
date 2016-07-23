@@ -2,9 +2,22 @@
   position: absolute;
   width: 30px;
   height: 30px;
-  background: red;
+  background: black;
 }
 
+.enemy1 {
+  background: green;
+}
+
+.enemy2 {
+  background: red;
+}
+.enemy3 {
+  background: blue;
+}
+.enemy4 {
+  background: yellow;
+}
 .block{
   position: absolute;
   width: 30px;
