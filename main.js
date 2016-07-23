@@ -4,102 +4,84 @@ $(function(){
 // Start of code
 // file:///Users/satiewaltz/code/project1/index.html
 
-
-var counter = 0;
 var levelWidth = $(".level").width()
 
-function enemyPosition(id, position){
-  setInterval(function() {
-    counter += 1 / 50;
-    $("#" + id ).css({
-      "margin-top": position,
-      "margin-left": counter
-    });
-  }, 1);
-}
-
-function takeDamage(hits) {
-  console.log("Current Enemy Damage: " + hits.numberOfHits);
-  if (hits.numberOfHits === 0) {
-    $(".enemy").remove();
+var takeDamage = function(id, enemyHealth) {
+  console.log("Current Enemy Damage: " + enemyHealth);
+  if (enemyHealth === 0) {
+    $("#" + currandom).remove();
   } else {
-    hits.numberOfHits -= 1;
+    enemyHealth -= 1;
   }
 }
 
-function assignUniqueID() {
-  $(".enemy").each(function(index, el) {
-    var randomPosition = Math.floor(Math.random() * 250);
-    var randomNum = Math.floor(Math.random() * 3000);
-    $(el).attr('id', randomNum);
-    enemyPosition(randomNum, randomPosition);
-  });
+var enemyPosition = function(currandom, currpose, currcount){
+  setInterval(function() {
+    $("#" + currandom).css({
+      "margin-top": currpose,
+      "margin-left": currcount += 1 / 5
+    });
+  }, 1)
 }
 
 function Enemy() {
-  this.el = $(".level").append("<div class='enemy'>");
-  this.randomIDgenerator = assignUniqueID();
-  this.numberOfHits = Math.floor(Math.random() * 3);
-  // this.location = enemyPosition(this.randomIDgenerator, this.randomPosition);
+  this.randomIDgenerator = Math.round(Math.random() * 10000);
+  this.randomPosition = Math.floor(Math.random() * 300);
+  this.enemyHealth = Math.floor(Math.random() * 2) + 1;
+  this.takeDamage = takeDamage(this.randomIDgenerator, this.enemyHealth);
+  this.counter = 0;
+  this.location = enemyPosition(this.randomIDgenerator, this.randomPosition, this.counter);
 }
 
-var enemyDIV = $("<div>");
-
-
-for (var i = 0; i < 30; i++) {
-  setInterval(function(){
-      var awdo = new Enemy;
-
-    $(".level").append(enemyDIV);
-
-
-      enemyDIV.data('ident', awdo.ident);
-  enemyDIV.data('location', awdo.location);
-  var dataholder = enemyDIV.data();
-  }, 1);
-
-
-}
-// for (var i = 0; i < 3; i++) {
-//   setTimeout(function(){
-//     $(".level").data(new Enemy)
-//   }, 200)
-// }
-// $(".level").append(Enemy);
-// $(".level").append(Enemy);
+setInterval(function() {
+  var newEnemyData = new Enemy;
+  var enemyDIV = $("<div>");
+  enemyDIV.data(newEnemyData);
+  enemyDIV.addClass('enemy');
+  enemyDIV.attr('id', enemyDIV.data().randomIDgenerator);
+  $(".level").append(enemyDIV);
+  var allEnemies = $(".enemy");
+  console.log(allEnemies.length)
+  if (allEnemies.length === 5) {
+    allEnemies.remove();
+  }
+}, 2000)
 
 var prevTimeStamp;
 var currgamestate;
 
-var gamestate = function() {
-  // if (counter <= (levelWidth - 100)) {
-    currgamestate = requestAnimationFrame(gamestate);
-    var gamePad = navigator.getGamepads()[0];
-    var currTimestamp = gamePad.timestamp;
-    // Comparing the state of the current timestamp
-    // and the previous, to prevent continous button input
-    // from incrementing counter.
-    if (prevTimeStamp != currTimestamp) {
-      if (gamePad.buttons[0].pressed) {
-        takeDamage($('.enemy'));
-      }
-    }
-    prevTimeStamp = currTimestamp;
-  // } else {
-  //   counter = 3000
-  //   console.log("You lost!");
-  // }
-}
-
-// if (requestAnimationFrame(gamestate) === 1) {
-
-    // enemy.attr('id', enemy.data("id"));
-    // console.log(newEnemys)
-    // $(".enemy").attr('id;
-
-// } else {
-  requestAnimationFrame(gamestate)
+// var gamestate = function() {
+//   // if (counter <= (levelWidth - 100)) {
+//     currgamestate = requestAnimationFrame(gamestate);
+//     var gamePad = navigator.getGamepads()[0];
+//     var currTimestamp = gamePad.timestamp;
+//     if (timestamp === "undefined") {
+//       return;
+//     }
+//     // Comparing the state of the current timestamp
+//     // and the previous, to prevent continous button input
+//     // from incrementing counter.
+//     if (prevTimeStamp != currTimestamp) {
+//       if (gamePad.buttons[0].pressed) {
+//         takeDamage($('.enemy'));
+//       }
+//     }
+//     prevTimeStamp = currTimestamp;
+//   // } else {
+//   //   counter = 3000
+//   //   console.log("You lost!");
+//   // }
 // }
+
+// // if (requestAnimationFrame(gamestate) === 1) {
+
+//     // enemy.attr('id', enemy.data("id"));
+//     // console.log(newEnemys)
+//     // $(".enemy").attr('id;
+
+// // } else {
+//   requestAnimationFrame(gamestate)
+// // }
 
 // End of code
 })
