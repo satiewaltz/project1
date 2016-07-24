@@ -3,6 +3,8 @@
 $(function(){
 // Start of code
 // file:///Users/satiewaltz/code/project1/index.html
+
+  // Game object
   var game = {
     allEnemies: $(".enemy"),
     level: $(".level"),
@@ -11,41 +13,45 @@ $(function(){
     gameSpeed: [600, 700, 800, 1000],
     loseCondition: 0,
     prevTimeStamp: '',
-    currgamestate: ''
+    currTimeStamp: '',
+
+    // Update level width on window resize
+    updatelevelWidth: setInterval(function(){
+      game.levelWidth = $(".level").width();
+    }, 1),
+
+    // Speed up enemy spawn rate every ten seconds
+    enemySpawnRateIncreaser: setInterval(function(){
+      game.gameSpeed.shift()
+    }, 10000),
+
+    // Speed up enemy move speed every second
+    enemyMoveSpeedIncreaser: setInterval(function(){
+      game.enemySpeedModifer /= 1.02
+    }, 1000)
   }
 
-  setInterval(function(){
-    game.gameSpeed.shift()
-  }, 1000)
-  setInterval(function(){
-    game.enemySpeedModifer /= 1.01
-  }, 1000)
-
-  var enemyPosition = function(currandom, currpose, currcount){
-    setInterval(function() {
-      $("#" + currandom).css({
-        "top": currpose,
-        "left": currcount += 0.3 / (1 * game.enemySpeedModifer)
+  var enemyPosition = function(identifier, verticalPosition, spawnLocation){
+    var updatePosition = setInterval(function() {
+      $("#" + identifier).css({
+        "top": verticalPosition,
+        "left": spawnLocation += 0.5 / (1 * game.enemySpeedModifer)
       });
-      if (currcount >= (game.levelWidth - 100)) {
-        currcount = (game.levelWidth - 100);
-        $("#" + currandom).remove();
+      if (spawnLocation >= (game.levelWidth - 100)) {
+        spawnLocation = (game.levelWidth - 100);
+        $("#" + identifier).remove();
+        // console.log("you lose")
       }
     }, 1)
-  }
-  var takeDamage = function(id, enemyHealth) {
-    // console.log("Current Enemy Health: " + enemyHealth);
-
   }
 
   function Enemy() {
     this.randomClassGenerator = "enemy" + String(Math.floor(Math.random() * 4) + 1);
     this.randomIDgenerator = Math.round(Math.random() * 50000);
-    this.randomPosition = Math.floor(Math.random() * 300);
+    this.randomVerticalPosition = Math.floor(Math.random() * 300);
     this.enemyHealth = Math.floor(Math.random() * 5) + 1;
-    this.ouch = takeDamage(this.randomIDgenerator, this.enemyHealth);
-    this.counter = 0;
-    this.location = enemyPosition(this.randomIDgenerator, this.randomPosition, this.counter);
+    this.spawnLocation = 0;
+    this.location = enemyPosition(this.randomIDgenerator, this.randomVerticalPosition, this.spawnLocation);
   }
 
   function createEnemy(){
@@ -69,60 +75,61 @@ $(function(){
       if (enemyDIV.data().enemyHealth <= 0) {
         $("#" + enemyDIV.data().randomIDgenerator).effect("explode", {pieces: 5}, 500).remove();
       }
+      if (enemyDIV.data().spawnLocation === (game.levelWidth - 100)) {
+        game.allEnemies.remove();
+        console.log("You lose!");
+      }
     }, 1)
-    if(enemyDIV.data().counter === (game.levelWidth - 100)) {
-      (game.levelWidth - 100)
-      enemyDIV.remove();
-    }
   }
+
   createEnemy();
   var gamePlaying = setInterval(function(){
     createEnemy()
   }, game.gameSpeed[0]);
-
 
   if (game.loseCondition === 20) {
     game.allEnemies.remove();
     clearInterval(gamePlaying);
   }
 
-
-
   function gamestate() {
-    // if (counter <= (levelWidth - 100)) {
     game.currgamestate = requestAnimationFrame(gamestate);
     var gamePad = navigator.getGamepads()[0];
-    game.currTimestamp = gamePad.timestamp;
-    // if (gamePad.timestamp === "undefined") {
-    // }
+    game.currTimeStamp = gamePad.timestamp;
     // Comparing the state of the current timestamp
     // and the previous, to prevent continous button input
     // from incrementing counter.
-    if (game.prevTimeStamp != game.currTimestamp) {
+    if (game.prevTimeStamp != game.currTimeStamp) {
       // Below took me 10 hours to figure out
       // thank you asynchronous functions!
+      // Test to see if jQuery element exists
+      // https://learn.jquery.com/using-jquery-core/faq/how-do-i-test-whether-an-element-exists/
       if (gamePad.buttons[0].pressed) {
-        $(".enemy1").data().enemyHealth -= 1
-      console.log($(".enemy1").first().data().enemyHealth)
-
+        if ($(".enemy1").length){
+          $(".enemy1").first().data().enemyHealth -= 1;
+        }
         // $(".enemy1").first()
       }
       if (gamePad.buttons[1].pressed) {
-        $(".enemy2").first().data().enemyHealth -= 1
+        if ($(".enemy2").length){
+          $(".enemy2").first().data().enemyHealth -= 1;
         // $(".enemy2").first().effect("explode", {pieces: 5}, 500).remove();
+        }
       }
       if (gamePad.buttons[2].pressed) {
-        $(".enemy3").first().data().enemyHealth -= 1
-
+        if ($(".enemy3").length){
+          $(".enemy3").first().data().enemyHealth -= 1;
         // $(".enemy3").first().effect("explode", {pieces: 5}, 500).remove();
+        }
       }
       if (gamePad.buttons[3].pressed) {
-        $(".enemy4").first().data().enemyHealth -= 1
-
+        if ($(".enemy4").length){
+          $(".enemy4").first().data().enemyHealth -= 1;
         // $(".enemy4").first().effect("explode", {pieces: 5}, 500).remove();
+        }
       }
     }
-    game.prevTimeStamp = game.currTimestamp;
+    game.prevTimeStamp = game.currTimeStamp;
   }
 gamestate();
 // End of code
