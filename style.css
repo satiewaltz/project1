@@ -1,3 +1,7 @@
+p, #score {
+  color: white;
+}
+
 .enemy{
   position: absolute;
   width: 30px;
