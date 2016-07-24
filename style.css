@@ -3,19 +3,29 @@
   width: 30px;
   height: 30px;
   background: black;
+  font-size: 30px;
+  color: gray;
 }
 
 .enemy1 {
+  width: 30px;
+  height: 30px;
   background: green;
 }
 
 .enemy2 {
+  width: 30px;
+  height: 30px;
   background: red;
 }
 .enemy3 {
+  width: 30px;
+  height: 30px;
   background: blue;
 }
 .enemy4 {
+  width: 30px;
+  height: 30px;
   background: yellow;
 }
 .block{
