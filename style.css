@@ -1,11 +1,16 @@
+body {
+  margin: 0;
+}
+
 p, #score {
   color: white;
+  margin: 0;
 }
 
 .enemy{
   position: absolute;
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   font-size: 30px;
   background: black;
   color: gray;
@@ -31,17 +36,9 @@ p, #score {
   color: black;
 }
 
-.block{
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  bottom: 0;
-  margin-left: 300px;
-  background: lightcyan;
-}
-
 .level {
+    margin: auto;
   position: relative;
-  height: 300px;
+  height: 100vh;
   background: gray;
 }

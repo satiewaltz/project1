@@ -15,7 +15,7 @@ $(function() {
       CreateEnemyData: function() {
         this.randomClassGenerator = "enemy" + String(Math.floor(Math.random() * 4) + 1);
         this.randomIDgenerator = Math.round(Math.random() * 50000);
-        this.randomVerticalPosition = Math.floor(Math.random() * 270);
+        this.randomVerticalPosition = Math.floor(Math.random() * ($(".level").height() - 50));
         this.enemyHealth = Math.floor(Math.random() * 5) + 1;
         this.spawnLocation = 0;
       },
@@ -38,20 +38,12 @@ $(function() {
 
       // Append the enemy to the DOM. Along with it's data
       appendEnemyToDOM: function() {
-
         var newEnemyData = new this.CreateEnemyData();
         var enemyDIV = $("<div>");
         enemyDIV.data(newEnemyData);
         enemyDIV.addClass('enemy');
         enemyDIV.addClass(enemyDIV.data().randomClassGenerator);
         enemyDIV.attr('id', enemyDIV.data().randomIDgenerator);
-
-        if ($(".enemy").length === 20) {
-          setInterval(function() {
-            $(".enemy").last().remove();
-          }, 1);
-        }
-
         game.level.append(enemyDIV);
         this.enemyPosition(enemyDIV.data().randomIDgenerator,
           enemyDIV.data().randomVerticalPosition,
@@ -59,36 +51,37 @@ $(function() {
       }
     },
 
+    // Level and Level Width
     level: $(".level"),
     levelWidth: $(".level").width(),
-
-    enemySpeedModifer: 1,
-    gameSpeed: [600, 700, 800, 1000],
+    levelHeight: $(".level").height(),
     // Update level width on window resize
-    updatelevelWidth: setInterval(function() {
+    // Makes game responsive
+    updateLevelSize: setInterval(function() {
+      game.levelHeight = $(".level").height();
       game.levelWidth = $(".level").width();
     }, 1),
+
+
+    // Enemy Speed
+    enemySpeedModifer: 1,
+    gameSpeed: [600, 700, 800, 1000],
     // Speed up enemy spawn rate every ten seconds
     enemySpawnRateIncreaser: setInterval(function() {
       game.gameSpeed.shift();
     }, 100),
     // Speed up enemy move speed every second
     enemyMoveSpeedIncreaser: setInterval(function() {
-      game.enemySpeedModifer += 0.02;
+      game.enemySpeedModifer += 0.04;
     }, 1000),
     // Keep track of gamepad timestamps
     prevTimeStamp: '',
     currTimeStamp: '',
 
-    winCondition: 0,
-    loseCondition: 0
+    winCondition: 0
   };
-
-  // Append Game Score
-
   // Main Game Loop - Makes the enemies move.
-  game.enemyGameLogic.appendEnemyToDOM();
-  var gamePlaying = setInterval(function() {
+  setInterval(function() {
     game.enemyGameLogic.appendEnemyToDOM();
   }, game.gameSpeed[0]);
 
@@ -100,35 +93,40 @@ $(function() {
     // Comparing the state of the current timestamp
     // and the previous, to prevent continous button input
     // from incrementing counter.
+    /////////////////////////////////////////////////////////////////
+    // ** Code below updates if previous timestamp is different ** //
     if (game.prevTimeStamp != game.currTimeStamp) {
       // Below took me 10 hours to figure out
       // thank you asynchronous functions!
-      // Test to see if jQuery element exists
+      // Test to see if the jQuery element exists
       // https://learn.jquery.com/using-jquery-core/faq/how-do-i-test-whether-an-element-exists/
       //
-      // Green Button
+      // Green Button on gamepad
       if (gamePad.buttons[0].pressed && $(".enemy1").length) {
         $(".enemy1").first().data().enemyHealth -= 1;
       }
-      // Red Button
+      // Red Button on gamepad
       if (gamePad.buttons[1].pressed && $(".enemy2").length) {
         $(".enemy2").first().data().enemyHealth -= 1;
       }
-      // Blue Button
+      // Blue Button on gamepad
       if (gamePad.buttons[2].pressed && $(".enemy3").length) {
         $(".enemy3").first().data().enemyHealth -= 1;
       }
-      // Yellow Button
+      // Yellow Button on gamepad
       if (gamePad.buttons[3].pressed && $(".enemy4").length) {
         $(".enemy4").first().data().enemyHealth -= 1;
       }
     }
-    /////////////////////////
+    //////////////////////////////////////////
+    // ** Code Below Updates Every Frame ** //
     // Below make the enemies explode upon their untimely demise.
     // It also updates health every millisecond, append it as text.
+    // Continue if theres enemies, if not dont do anything.
     if ($(".enemy").length) {
-      // Continue if theres enemies, if not dont do anything.
+      // Grabs lastest enemy, and appends their health to them.
       $("#" + $(".enemy").data().randomIDgenerator).text($(".enemy").data().enemyHealth);
+
       //////////////////////////
       // ** Game Win logic ** //
       //
@@ -155,10 +153,11 @@ $(function() {
       //
       // Get the value of the first enemy, first enemy will always have the
       // most "left" value since they spawned first. Splice the "px" suffix
-       // or the "end" of the level.
+      // or the "end" of the level.
       var enemyLeftValue = Math.floor(Number($(".enemy").first().css("left").slice(0, -2)));
-      if (enemyLeftValue >= (game.levelWidth - 30)) {
+      if (enemyLeftValue >= (game.levelWidth - 50)) {
         $(".enemy").remove();
+        game.score = 0;
         game.winCondition = 0;
         game.enemySpeedModifer = 1;
         console.log("You lose!");
