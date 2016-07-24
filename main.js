@@ -48,20 +48,30 @@ $(function() {
         enemyDIV.addClass('enemy');
         enemyDIV.addClass(enemyDIV.data().randomClassGenerator);
         enemyDIV.attr('id', enemyDIV.data().randomIDgenerator);
-        setInterval(function() {
-          enemyDIV.text(enemyDIV.data().enemyHealth);
-        }, 1);
-        if (this.selectAllEnemies.length === 20) {
+
+        if ($(".enemy").length === 20) {
           setInterval(function() {
-            this.selectAllEnemies.last().remove();
+            $(".enemy").last().remove();
           }, 1);
         }
+
+        // Below make the enemies explode upon their untimely demise.
+        // It also updates health every millisecond, append it as text.
         setInterval(function() {
+          enemyDIV.text(enemyDIV.data().enemyHealth);
           if (enemyDIV.data().enemyHealth <= 0) {
             $("#" + enemyDIV.data().randomIDgenerator).effect("explode", {pieces: 5}, 500).remove();
+            game.winCondition += 1;
+            if (game.winCondition === 2) {
+              game.winCondition = 0;
+              $(".enemy").effect("explode", {pieces: 5}, 500).remove();
+              setTimeout(function(){
+                alert("WINRAR IS YOU");
+              }, 480)
+            }
           }
           if (enemyDIV.data().spawnLocation >= (this.levelWidth - 100)) {
-            this.selectAllEnemies.remove();
+            $(".enemy").remove();
             console.log("You lose!");
           }
         }, 1);
@@ -77,7 +87,6 @@ $(function() {
 
     enemySpeedModifer: 1,
     gameSpeed: [600, 700, 800, 1000],
-    loseCondition: 0,
     // Update level width on window resize
     updatelevelWidth: setInterval(function() {
       game.levelWidth = $(".level").width();
@@ -93,19 +102,19 @@ $(function() {
 
     prevTimeStamp: '',
     currTimeStamp: '',
-  };
 
+    winCondition: 0,
+    loseCondition: 0
+  };
 
 
   game.enemyGameLogic.appendEnemyToDOM();
   var gamePlaying = setInterval(function() {
-      game.enemyGameLogic.appendEnemyToDOM();
+
+    game.enemyGameLogic.appendEnemyToDOM();
   }, game.gameSpeed[0]);
 
-  if (game.loseCondition === 20) {
-    game.selectAllEnemies.remove();
-    clearInterval(gamePlaying);
-  }
+
 
   (function listenToGamepad() {
     requestAnimationFrame(listenToGamepad);
@@ -140,7 +149,6 @@ $(function() {
         $(".enemy4").first().data().enemyHealth -= 1;
       }
     }
-
     // Reassign the previous timestamp as the current.
     // To compare over again.
     game.prevTimeStamp = game.currTimeStamp;
