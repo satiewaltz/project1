@@ -15,7 +15,7 @@ $(function() {
       CreateEnemyData: function() {
         this.randomClassGenerator = "enemy" + String(Math.floor(Math.random() * 4) + 1);
         this.randomIDgenerator = Math.round(Math.random() * 50000);
-        this.randomVerticalPosition = Math.floor(Math.random() * 300);
+        this.randomVerticalPosition = Math.floor(Math.random() * 270);
         this.enemyHealth = Math.floor(Math.random() * 5) + 1;
         this.spawnLocation = 0;
       },
@@ -32,11 +32,11 @@ $(function() {
             "top": verticalPosition,
             "left": spawnLocation += 0.5 / (1 * game.enemySpeedModifer)
           });
-          if (spawnLocation >= (game.levelWidth - 100)) {
-            spawnLocation = (game.levelWidth - 100);
-            $("#" + identifier).remove();
-            // console.log("you lose")
-          }
+          // if (spawnLocation >= (game.levelWidth - 100)) {
+          //   spawnLocation = (game.levelWidth - 100);
+          //   $("#" + identifier).remove();
+          //   // console.log("you lose")
+          // }
         }, 1);
       },
 
@@ -58,21 +58,39 @@ $(function() {
         // Below make the enemies explode upon their untimely demise.
         // It also updates health every millisecond, append it as text.
         setInterval(function() {
-          enemyDIV.text(enemyDIV.data().enemyHealth);
-          if (enemyDIV.data().enemyHealth <= 0) {
-            $("#" + enemyDIV.data().randomIDgenerator).effect("explode", {pieces: 5}, 500).remove();
-            game.winCondition += 1;
-            if (game.winCondition === 2) {
-              game.winCondition = 0;
-              $(".enemy").effect("explode", {pieces: 5}, 500).remove();
-              setTimeout(function(){
-                alert("WINRAR IS YOU");
-              }, 480)
+          // Continue if theres enemies, if not dont do anything.
+          if ($(".enemy").length) {
+            enemyDIV.text(enemyDIV.data().enemyHealth);
+
+            // ** Game Win logic ** //
+            //
+            // Explode if the enemies health is 0 or below, and increment the win condition
+            if (enemyDIV.data().enemyHealth <= 0) {
+              $("#" + enemyDIV.data().randomIDgenerator).effect("explode", {pieces: 5}, 500).remove();
+              game.winCondition += 1;
+              //
+              // If the win condition is furfilled after the player killed enemy,
+              // let player know they won.
+              if (game.winCondition === 2) {
+                game.winCondition = 0;
+                $(".enemy").effect("explode", {pieces: 5}, 500).remove();
+                setTimeout(function(){
+                  alert("WINRAR IS YOU");
+                }, 480)
+              }
             }
-          }
-          if (enemyDIV.data().spawnLocation >= (this.levelWidth - 100)) {
-            $(".enemy").remove();
-            console.log("You lose!");
+
+            // ** Game Loss logic ** //
+            //
+            // Get the value of the first enemy, first enemy will always have the
+            // most "left" value since they spawned first. Splice the "px" suffix
+            // and turn the string to a number to compare against the width of the window,
+            // or the "end" of the level.
+            var enemyLeftValue = Math.floor(Number($(".enemy").first().css("left").slice(0, -2)));
+            if (enemyLeftValue >= (game.levelWidth - 30)) {
+              $(".enemy").remove();
+              console.log("You lose!");
+            }
           }
         }, 1);
         game.level.append(enemyDIV);
@@ -107,15 +125,13 @@ $(function() {
     loseCondition: 0
   };
 
-
+  // Main Game Loop - Makes the enemies move.
   game.enemyGameLogic.appendEnemyToDOM();
   var gamePlaying = setInterval(function() {
-
     game.enemyGameLogic.appendEnemyToDOM();
   }, game.gameSpeed[0]);
 
-
-
+  // Controller polling loop - Listens to buttons presses.
   (function listenToGamepad() {
     requestAnimationFrame(listenToGamepad);
     var gamePad = navigator.getGamepads()[0];
