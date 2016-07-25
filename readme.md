@@ -1,11 +1,11 @@
-Project 1 - Dave Barthly
+# Project 1 - Dave Barthly
 
-Pseudo Code:
+## Pseudo Code
 
-This pseudo code was written as a reference to help me start off when I first began working, the finished code is significantly in form from what I wrote here. Due to working around bugs, and discovering how certain things behaved.
+_This pseudo code was written as a reference to help me start off when I first began working, the finished code is significantly in form from what I wrote here. Due to working around bugs, and discovering how certain things behaved._
 
-Though this and the final are similar on a conceptual level now that I read it over again.
-
+_Though this and the final are similar on a conceptual level now that I read it over again._
+***
 Var Bat Counter: 0; Gets incremented by the Bat object each time it is created
 
 Bat Object: Property: increments Bat counter Method: Randomizer - produces a random number Method of random Buttons: invoke a random button from the gamepad array using the Randomizer method: and number of buttons to add, passes in randomizer as a method. Each of the buttons will have an event listener to listen for button presses. Adds times to click to defeat as a property Each of the event listeners will decrement a counter on button press, if this counter is 0 the entire object should be removed from the dom. Display button from an array as an image, to tell player what button to press Successful button presses should increase the score Display method: call the above code to display above the sprite, and sprite itself. Append Bat objects to dom. But only if it has button property If counter 0: play an animation showing you celebrating
@@ -22,22 +22,23 @@ Bat constructor: Should have all the properties and methods for the Bat object a
 
 Bats should listen to buttons events at all times. Giant hammer to smash Bats.
 
-Initial User Stories
+## Initial User Stories
 
 A user should be able to destroy Bats using their controller.
 A user should be able to freely decide to use a controller or a keyboard to interact with.
 A user should be able to see their character wiggle whenever they squash a Bat.
 A user should be able to easily view their game score.
 A user should be able to upgrade their Bat squashing power after each level.
-Credit
+
+## Credit
 
 This outlines my usage of the gamepad API, all other credit, and details conventions I must follow to use said API. In the sprit to not plagerize, and academic honesty.
 
 Comparing timestamps is my implemetation of a concept outlined here: http://www.html5rocks.com/en/tutorials/doodles/gamepad/#toc-presses-polling
 
-Note: I've only used this tutorial to study concepts involving gamepad input, This tutorial was made while the API was still young, and has extremely outdated info regarding usage of it. I heavily relied on MDN's documentation regarding using it.
+_Note: I've only used this tutorial to study concepts involving gamepad input, This tutorial was made while the API was still young, and has extremely outdated info regarding usage of it. I heavily relied on MDN's documentation regarding using it._
 
-Gamepad API Info
+## Gamepad API Info
 
 https://w3c.github.io/gamepad/#usage-examples The usage example above shows the typical way to access a gamepad, a convention. Accessing the gamepad via requestAnimationFrame shows up through multiple sources.
 
@@ -60,30 +61,32 @@ Example: navigator.getGamepads returns an array, so the only way for me to acces
 
 General API Info:
 
-https://developer.mozilla.org/en-US/docs/Web/API/Gamepad
+- https://developer.mozilla.org/en-US/docs/Web/API/Gamepad
 Info regarding button press property of the Gamepad object:
 
-https://developer.mozilla.org/en-US/docs/Web/API/GamepadButton/pressed
+- https://developer.mozilla.org/en-US/docs/Web/API/GamepadButton/pressed
 A method that returns an array of Gamepad objects:
 
-https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getGamepads
+- https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getGamepads
 Example from W3C showing usage of the API involving requestAnimationFrame:
 
-https://w3c.github.io/gamepad/#usage-examples
+- https://w3c.github.io/gamepad/#usage-examples
 Note: I only learned after how to do this after studying the example witin the W3 specification and not MDN. And it appears there is no way around to originally implement my own solution to listen for events on the gamepad aside from using requestAnimationFrame. Despite this I've included as much credit where due to outline this as explicitly as possible.
 
-P.S - The MDN examples were extremely non-intutive but have helped me find a way to get the data I need by accessing certain methods. I then went back to view the MDN examples to see how requestAnimationFrame actually worked.
+_P.S - The MDN examples were extremely non-intutive but have helped me find a way to get the data I need by accessing certain methods. I then went back to view the MDN examples to see how requestAnimationFrame actually worked._
 
-Shoutouts
+## Shoutouts
 
-People who aided me:
+#### People who aided me:
 
-Bryan Mytko - Storing properties in an javascript object to DOM objects using jQuery's .data().
-Noah Feder - Taking the object oriented approach I eventually did.
-Jared Murphy - Tips regarding separating DOM objects and javascript objects.
-Wireframes
+- Bryan Mytko - Storing properties in an javascript object to DOM objects using jQuery's .data().
+- Noah Feder - Taking the object oriented approach I eventually did.
+- Jared Murphy - Tips regarding separating DOM objects and javascript objects.
+
+## Wireframes
 
 Early stage battle screen
 
 https://wireframe.cc/cVSx1s
-Note: Finished game ended up being close to the above. intially I was more ambitious about what I was going to make but time constrants only allowed for so much in light of what I was implementing. I chose not to make more wireframes to actually get the project v.s. iterating over design ideas
+
+_Note: Finished game ended up being close to the above. intially I was more ambitious about what I was going to make but time constrants only allowed for so much in light of what I was implementing. I chose not to make more wireframes to actually get the project v.s. iterating over design ideas._
