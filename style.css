@@ -2,9 +2,15 @@ body {
   margin: 0;
 }
 
-p, #score {
+.scoreText, #score {
   color: white;
   margin: 0;
+}
+
+.superCombo {
+  color: white;
+  font-size: 59px;
+  text-align: center;
 }
 
 .enemy{
@@ -13,7 +19,6 @@ p, #score {
   height: 50px;
   font-size: 30px;
   background: black;
-  color: gray;
 }
 
 .enemy1 {

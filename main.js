@@ -16,7 +16,7 @@ $(function() {
         this.randomClassGenerator = "enemy" + String(Math.floor(Math.random() * 4) + 1);
         this.randomIDgenerator = Math.round(Math.random() * 50000);
         this.randomVerticalPosition = Math.floor(Math.random() * ($(".level").height() - 50));
-        this.enemyHealth = Math.floor(Math.random() * 5) + 1;
+        this.enemyHealth = Math.floor(Math.random() * 3) + 1;
         this.spawnLocation = 0;
       },
 
@@ -95,6 +95,7 @@ $(function() {
     // from incrementing counter.
     /////////////////////////////////////////////////////////////////
     // ** Code below updates if previous timestamp is different ** //
+    //
     if (game.prevTimeStamp != game.currTimeStamp) {
       // Below took me 10 hours to figure out
       // thank you asynchronous functions!
@@ -120,6 +121,7 @@ $(function() {
     }
     //////////////////////////////////////////
     // ** Code Below Updates Every Frame ** //
+    //
     // Below make the enemies explode upon their untimely demise.
     // It also updates health every millisecond, append it as text.
     // Continue if theres enemies, if not dont do anything.
@@ -139,12 +141,13 @@ $(function() {
         //
         // If the win condition is furfilled after the player killed enemy,
         // let player know they won.
-        if (game.winCondition === 20) {
+        if (game.winCondition === 5) {
           game.winCondition = 0;
           $(".enemy").effect("explode", {pieces: 5}, 500).remove();
-          setTimeout(function() {
-            alert("WINRAR IS YOU");
-          }, 480);
+          $(".superCombo").text("Nice combo!")
+          setTimeout(function(){
+            $(".superCombo").fadeOut('slow', function() {});
+          }, 1200);
         }
       }
 
@@ -156,6 +159,7 @@ $(function() {
       // or the "end" of the level.
       var enemyLeftValue = Math.floor(Number($(".enemy").first().css("left").slice(0, -2)));
       if (enemyLeftValue >= (game.levelWidth - 50)) {
+        // $(".superCombo").text("");
         $(".enemy").remove();
         game.score = 0;
         game.winCondition = 0;
