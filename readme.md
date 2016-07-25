@@ -40,7 +40,9 @@ _Note: I've only used this tutorial to study concepts involving gamepad input, T
 
 ## Gamepad API Info
 
-https://w3c.github.io/gamepad/#usage-examples The usage example above shows the typical way to access a gamepad, a convention. Accessing the gamepad via requestAnimationFrame shows up through multiple sources.
+https://w3c.github.io/gamepad/#usage-examples 
+
+The usage example above shows the typical way to access a gamepad, a convention. Accessing the gamepad via requestAnimationFrame shows up through multiple sources.
 
 The only way to listen for button events is in the format of:
 

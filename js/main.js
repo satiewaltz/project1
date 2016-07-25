@@ -101,6 +101,7 @@ $(function() {
       }
     }
   };
+
   // Main Game Loop - Makes the enemies move.
   setInterval(function() {
     game.enemyGameLogic.appendEnemyToDOM();
@@ -183,6 +184,9 @@ $(function() {
               setTimeout(function() {
                 game.comboText.text("Game Over, you win!").effect("pulsate");
               }, 2000);
+              setTimeout(function() {
+                game.comboText.text("Game Over, you win!").effect("explode");
+              }, 4000);
               break;
             // case 65:
             //   game.comboText.show().text("Best combo I've ever seen! 😄");
@@ -194,7 +198,8 @@ $(function() {
             //   break;
           }
           game.nextStreak += (5 * game.comboMultiplier);
-          $(".currentComboStreak").effect("shake");
+          $(".level").effect("shake");
+          $(".currentComboStreak").effect(2, 3);
           setTimeout(function(){
             game.comboText.fadeOut('slow');
           }, 2000);
