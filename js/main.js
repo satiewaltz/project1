@@ -102,7 +102,7 @@ $(function() {
       // Below took me 10 hours to figure out
       // thank you asynchronous functions!
       // Test to see if the jQuery element exists
-      // https://learn.jquery.com/using-jquery-core/faq/how-do-i-test-whether-an-element-exists/
+      // Credit: https://learn.jquery.com/using-jquery-core/faq/how-do-i-test-whether-an-element-exists/
       //
       // Green Button on gamepad
       if (gamePad.buttons[0].pressed && $(".enemy1").length) {
@@ -129,19 +129,19 @@ $(function() {
     // Continue if theres enemies, if not dont do anything.
     if ($(".enemy").length) {
       // Grabs lastest enemy, and appends their health to them.
-      $("#" + $(".enemy").data().randomIDgenerator).text($(".enemy").data().enemyHealth);
+      // $(".enemy1").append("<img class='buttons' src='img/green_button.png'/>")
+      $("#" + $(".enemy").data().randomIDgenerator).text($(".enemy").data().enemyHealth + "x");
 
       //////////////////////////
-      // ** Game Win logic ** //
+      // ** Game Combo logic ** //
       //
-      // Explode if the enemies health is 0 or below, and increment the win condition
+      // Explode if the enemies health is 0 or below, and increment the combo
       if ($(".enemy").data().enemyHealth <= 0) {
         $(".enemy").data().enemyHealth = 0;
         game.score += (1 * game.comboMultiplier);
         $("#" + $(".enemy").data().randomIDgenerator).effect("explode", {pieces: 5}, 500).remove();
         game.comboStreak += 1;
         //
-
         // Display message depending on current combo streak
         if (game.comboStreak === game.nextStreak) {
           $(".enemy").effect("explode", {pieces: 5}, 500).remove();
@@ -151,34 +151,35 @@ $(function() {
               game.comboMultiplier = 2;
               break;
             case 15:
-              game.comboText.show().text("Pretty good combo! Show those bugs no mercy! 👍");
+              game.comboText.show().text("Pretty good combo! Show those bats no mercy!👌");
               game.comboMultiplier = 3;
               break;
-            case 25:
+            case 27:
               game.comboText.show().text("Great combo! 👍");
               game.comboMultiplier = 4;
               break;
             case 45:
-              game.comboText.show().text("Fantastic combo you silly coder! 👍");
+              game.comboText.show().text("🔥 Fantastic combo coder! 🔥");
               game.comboMultiplier = 5;
               break;
             case 65:
-              game.comboText.show().text("Are you Linus?! 👍");
+              game.comboText.show().text("Best combo I've ever seen! 😄");
               game.comboMultiplier = 10;
               break;
             case 95:
-              game.comboText.show().text("Paul Irish is proud of you! 👍");
+              game.comboText.show().text("You are the very best! 💯");
               game.comboMultiplier = 100;
               break;
           }
           game.nextStreak += (5 * game.comboMultiplier);
+          $(".currentComboStreak").effect("shake");
           setTimeout(function(){
             game.comboText.fadeOut('slow');
-          }, 1200);
+          }, 2000);
           console.log(game.nextStreak);
         }
       }
-      //
+
       ///////////////////////////
       // ** Game Loss logic ** //
       //
@@ -194,7 +195,12 @@ $(function() {
         game.comboMultiplier = 1;
         game.nextStreak = 5;
         game.enemySpeedModifer = 1;
-        console.log("You lose!");
+        // Clear all intervals on page
+        // Credit: http://stackoverflow.com/questions/958433/how-can-i-clearinterval-for-all-setinterval
+        for (var i = 1; i < 99999; i++) {
+          window.clearInterval(i);
+        }
+        game.comboText.text("Game Over").effect("pulsate");
       }
       // Update score and streak on DOM after everything
       $("#streak").text(game.comboMultiplier);

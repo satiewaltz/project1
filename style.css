@@ -1,5 +1,20 @@
+* {
+  font-family: arcade;
+  word-spacing: 10px;
+  text-shadow: -1px 0 5px black, 1px 0 5px black;
+  color: white;
+}
+
 body {
   margin: 0;
+}
+
+/* Player stats */
+.playerstats {
+  margin-left: 10px;
+  transform: rotateZ(-10deg);
+  width: 80px;
+  font-size: 33px;
 }
 
 .scoreText, #score {
@@ -7,47 +22,73 @@ body {
   margin: 0;
 }
 
+.currentComboStreak {
+  margin-top: 7px;
+  color: white;
+}
+
+/* Combo Notifcation */
 .superCombo {
   color: white;
   font-size: 59px;
   text-align: center;
 }
 
-.currentComboStreak {
-  color: white;
-}
-
+/* Enemy CSS */
 .enemy{
   position: absolute;
-  width: 50px;
-  height: 50px;
-  font-size: 30px;
+  width: 120px;
+  height: 120px;
+  font-size: 40px;
   background: black;
+  background-size: cover;
 }
 
 .enemy1 {
   background: green;
-  color: white;
+  background: url('img/bat.gif'), url('img/green_button.png');
+  background-repeat: no-repeat;
+  background-size: cover, 30px;
+  background-position: left, right;
 }
 
 .enemy2 {
-  background: red;
-  color: white;
+  background: green;
+  background: url('img/bat.gif'), url('img/red_button.png');
+  background-repeat: no-repeat;
+  background-size: cover, 30px;
+  background-position: left, right;
 }
 
 .enemy3 {
-  background: blue;
-  color: white;
+  background: green;
+  background: url('img/bat.gif'), url('img/blue_button.png');
+  background-repeat: no-repeat;
+  background-size: cover, 30px;
+  background-position: left, right;
 }
 
 .enemy4 {
-  background: yellow;
-  color: black;
+  background: green;
+  background: url('img/bat.gif'), url('img/yellow_button.png');
+  background-repeat: no-repeat;
+  background-size: cover, 30px;
+  background-position: left, right;
 }
 
 .level {
-    margin: auto;
+  margin: auto;
+  padding: 20px;
   position: relative;
   height: 100vh;
   background: gray;
+  background: url('img/sunset.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+
+}
+
+@font-face {
+  font-family: arcade;
+  src: url(fonts/ARCADECLASSIC.TTF);
 }
