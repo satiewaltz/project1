@@ -3,6 +3,11 @@
 $(function() {
 // Start of code
 // file:///Users/satiewaltz/code/project1/index.html
+//
+// *** IMPORTANT *** //
+// Full details of how I used the gamepad API are in the readme of this
+// project. For the sake of avoiding lowering the readibility of my code.
+// ***************** //
 
   // Game object
   var game = {
@@ -80,7 +85,21 @@ $(function() {
     comboMultiplier: 1,
     comboText: $(".superCombo"),
     comboStreak: 0,
-    nextStreak: 5
+    nextStreak: 5,
+
+    gameOver: function(){
+      $(".enemy").remove();
+      game.score = 0;
+      game.comboStreak = 0;
+      game.comboMultiplier = 1;
+      game.nextStreak = 5;
+      game.enemySpeedModifer = 1;
+      // Clear all intervals on page
+      // Credit: http://stackoverflow.com/questions/958433/how-can-i-clearinterval-for-all-setinterval
+      for (var i = 1; i < 99999; i++) {
+        window.clearInterval(i);
+      }
+    }
   };
   // Main Game Loop - Makes the enemies move.
   setInterval(function() {
@@ -131,7 +150,6 @@ $(function() {
       // Grabs lastest enemy, and appends their health to them.
       // $(".enemy1").append("<img class='buttons' src='img/green_button.png'/>")
       $("#" + $(".enemy").data().randomIDgenerator).text($(".enemy").data().enemyHealth + "x");
-
       //////////////////////////
       // ** Game Combo logic ** //
       //
@@ -159,47 +177,41 @@ $(function() {
               game.comboMultiplier = 4;
               break;
             case 45:
-              game.comboText.show().text("🔥 Fantastic combo coder! 🔥");
+              game.comboText.show().text("🔥 Fantastic combo coder! You destroyed enough bats! 🔥");
               game.comboMultiplier = 5;
+              game.gameOver();
+              setTimeout(function() {
+                game.comboText.text("Game Over, you win!").effect("pulsate");
+              }, 2000);
               break;
-            case 65:
-              game.comboText.show().text("Best combo I've ever seen! 😄");
-              game.comboMultiplier = 10;
-              break;
-            case 95:
-              game.comboText.show().text("You are the very best! 💯");
-              game.comboMultiplier = 100;
-              break;
+            // case 65:
+            //   game.comboText.show().text("Best combo I've ever seen! 😄");
+            //   game.comboMultiplier = 10;
+            //   break;
+            // case 95:
+            //   game.comboText.show().text("You are the very best! 💯");
+            //   game.comboMultiplier = 100;
+            //   break;
           }
           game.nextStreak += (5 * game.comboMultiplier);
           $(".currentComboStreak").effect("shake");
           setTimeout(function(){
             game.comboText.fadeOut('slow');
           }, 2000);
-          console.log(game.nextStreak);
         }
       }
-
       ///////////////////////////
-      // ** Game Loss logic ** //
+      // ** Game Over logic ** //
       //
       // Get the value of the first enemy, first enemy will always have the
       // most "left" value since they spawned first. Splice the "px" suffix
-      // or the "end" of the level.
+      // or the "end" of the level. Clear all loops and show game over text.
+      //
       var enemyLeftValue = Math.floor(Number($(".enemy").first().css("left").slice(0, -2)));
       if (enemyLeftValue >= (game.levelWidth - 50)) {
         // $(".superCombo").text("");
         $(".enemy").remove();
-        game.score = 0;
-        game.comboStreak = 0;
-        game.comboMultiplier = 1;
-        game.nextStreak = 5;
-        game.enemySpeedModifer = 1;
-        // Clear all intervals on page
-        // Credit: http://stackoverflow.com/questions/958433/how-can-i-clearinterval-for-all-setinterval
-        for (var i = 1; i < 99999; i++) {
-          window.clearInterval(i);
-        }
+        game.gameOver();
         game.comboText.text("Game Over").effect("pulsate");
       }
       // Update score and streak on DOM after everything
