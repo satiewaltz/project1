@@ -44,34 +44,40 @@ https://w3c.github.io/gamepad/#usage-examples The usage example above shows the 
 
 The only way to listen for button events is in the format of:
 
- function callback() {
+```Javascript
+function callback() {
   requestAnimationFrame(callback) // New Frame
   var gamepad = Gamepad // Get the current state of the gamepad in the current frame
   var gamepad = navigator.getGamepads[0] // Another way to do the line above. Grabs first one it finds
   console.log(gamepad.buttons[0]) // Do stuff with buttons by accessing its index
 }
 callback(); // Reset frame by recalling function
-Deviation from the above structure of the program will result in not accessing the API, or errors. I've outlined credit to W3's and MDN's examples that follow this format, which also helped me learn how to utlize it. Though the program structure above is implied to be common convention to do this work.
+```
+Deviation from the above structure of the program will result in not accessing the API, or errors. I've outlined credit to W3C's and MDN's examples that follow this format, which also helped me learn how to utlize it. Though the program structure above is implied to be common convention to do this work.
 
-The code above is following as outlined in the w3 specification itself, all logic is of my work. I am following the reccomended way to access and use the gamepad API. The links below outline what is going on, any similarities within their examples are due to the nature of this being the only way to access/use the API due to its immaturity. Naturally, there is only one way to access a button; through specifiying its index within the buttons array property in the gamepad object.
+The code above is following as outlined in the W3C specification itself, all logic is of my work. I am following the reccomended way to access and use the gamepad API. The links below outline what is going on, any similarities within their examples are due to the nature of this being the only way to access/use the API due to its immaturity. Naturally, there is only one way to access a button; through specifiying its index within the buttons array property in the gamepad object.
 
 These links outline the usage of the API, and accessing things such as the gamepad you want to get data from. The examples in the links outlines how to access and use certian features of the API.
 
-Example: navigator.getGamepads returns an array, so the only way for me to access an element in an array is through brackets [i]; and the index of the element I want to access, which is 'i'.
+_Example: `navigator.getGamepads;` returns an array, so the only way for me to access an element in an array is through `arrayNavigatorReturns[i];` and the index of the element I want to access, which is 'i'._
 
-General API Info:
+__General API Info:__
 
 - https://developer.mozilla.org/en-US/docs/Web/API/Gamepad
-Info regarding button press property of the Gamepad object:
+
+__Info regarding button press property of the Gamepad object:__
 
 - https://developer.mozilla.org/en-US/docs/Web/API/GamepadButton/pressed
-A method that returns an array of Gamepad objects:
+
+__A method that returns an array of Gamepad objects:__
 
 - https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getGamepads
-Example from W3C showing usage of the API involving requestAnimationFrame:
+
+__Example from W3C showing usage of the API involving requestAnimationFrame:__
 
 - https://w3c.github.io/gamepad/#usage-examples
-Note: I only learned after how to do this after studying the example witin the W3 specification and not MDN. And it appears there is no way around to originally implement my own solution to listen for events on the gamepad aside from using requestAnimationFrame. Despite this I've included as much credit where due to outline this as explicitly as possible.
+
+_Note: I only learned after how to do this after studying the example witin the W3 specification and not MDN. And it appears there is no way around to originally implement my own solution to listen for events on the gamepad aside from using requestAnimationFrame. Despite this I've included as much credit where due to outline this as explicitly as possible._
 
 _P.S - The MDN examples were extremely non-intutive but have helped me find a way to get the data I need by accessing certain methods. I then went back to view the MDN examples to see how requestAnimationFrame actually worked._
 
