@@ -13,6 +13,10 @@ body {
   text-align: center;
 }
 
+.currentComboStreak {
+  color: white;
+}
+
 .enemy{
   position: absolute;
   width: 50px;

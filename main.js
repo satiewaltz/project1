@@ -62,7 +62,6 @@ $(function() {
       game.levelWidth = $(".level").width();
     }, 1),
 
-
     // Enemy Speed
     enemySpeedModifer: 1,
     gameSpeed: [600, 700, 800, 1000],
@@ -78,7 +77,10 @@ $(function() {
     prevTimeStamp: '',
     currTimeStamp: '',
 
-    winCondition: 0
+    comboMultiplier: 1,
+    comboText: $(".superCombo"),
+    comboStreak: 0,
+    nextStreak: 5
   };
   // Main Game Loop - Makes the enemies move.
   setInterval(function() {
@@ -135,22 +137,48 @@ $(function() {
       // Explode if the enemies health is 0 or below, and increment the win condition
       if ($(".enemy").data().enemyHealth <= 0) {
         $(".enemy").data().enemyHealth = 0;
-        game.score += 1;
+        game.score += (1 * game.comboMultiplier);
         $("#" + $(".enemy").data().randomIDgenerator).effect("explode", {pieces: 5}, 500).remove();
-        game.winCondition += 1;
+        game.comboStreak += 1;
         //
-        // If the win condition is furfilled after the player killed enemy,
-        // let player know they won.
-        if (game.winCondition === 5) {
-          game.winCondition = 0;
+
+        // Display message depending on current combo streak
+        if (game.comboStreak === game.nextStreak) {
           $(".enemy").effect("explode", {pieces: 5}, 500).remove();
-          $(".superCombo").text("Nice combo!")
+          switch(game.comboStreak) {
+            case 5:
+              game.comboText.show().text("Nice combo! 👍");
+              game.comboMultiplier = 2;
+              break;
+            case 15:
+              game.comboText.show().text("Pretty good combo! Show those bugs no mercy! 👍");
+              game.comboMultiplier = 3;
+              break;
+            case 25:
+              game.comboText.show().text("Great combo! 👍");
+              game.comboMultiplier = 4;
+              break;
+            case 45:
+              game.comboText.show().text("Fantastic combo you silly coder! 👍");
+              game.comboMultiplier = 5;
+              break;
+            case 65:
+              game.comboText.show().text("Are you Linus?! 👍");
+              game.comboMultiplier = 10;
+              break;
+            case 95:
+              game.comboText.show().text("Paul Irish is proud of you! 👍");
+              game.comboMultiplier = 100;
+              break;
+          }
+          game.nextStreak += (5 * game.comboMultiplier);
           setTimeout(function(){
-            $(".superCombo").fadeOut('slow', function() {});
+            game.comboText.fadeOut('slow');
           }, 1200);
+          console.log(game.nextStreak);
         }
       }
-
+      //
       ///////////////////////////
       // ** Game Loss logic ** //
       //
@@ -162,14 +190,16 @@ $(function() {
         // $(".superCombo").text("");
         $(".enemy").remove();
         game.score = 0;
-        game.winCondition = 0;
+        game.comboStreak = 0;
+        game.comboMultiplier = 1;
+        game.nextStreak = 5;
         game.enemySpeedModifer = 1;
         console.log("You lose!");
       }
-      // Update score after everything
+      // Update score and streak on DOM after everything
+      $("#streak").text(game.comboMultiplier);
       $("#score").text(game.score);
     }
-
     // Reassign the previous timestamp as the current.
     // To compare over again.
     game.prevTimeStamp = game.currTimeStamp;
