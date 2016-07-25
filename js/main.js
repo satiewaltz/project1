@@ -20,7 +20,7 @@ $(function() {
       CreateEnemyData: function() {
         this.randomClassGenerator = "enemy" + String(Math.floor(Math.random() * 4) + 1);
         this.randomIDgenerator = Math.round(Math.random() * 50000);
-        this.randomVerticalPosition = Math.floor(Math.random() * ($(".level").height() - 50));
+        this.randomVerticalPosition = Math.floor(Math.random() * ($(".level").height() - 130));
         this.enemyHealth = Math.floor(Math.random() * 3) + 1;
         this.spawnLocation = 0;
       },
@@ -101,7 +101,6 @@ $(function() {
       }
     }
   };
-
   // Main Game Loop - Makes the enemies move.
   setInterval(function() {
     game.enemyGameLogic.appendEnemyToDOM();
@@ -199,7 +198,7 @@ $(function() {
           }
           game.nextStreak += (5 * game.comboMultiplier);
           $(".level").effect("shake");
-          $(".currentComboStreak").effect(2, 3);
+          $(".currentComboStreak").effect("shake");
           setTimeout(function(){
             game.comboText.fadeOut('slow');
           }, 2000);
