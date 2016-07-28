@@ -1,5 +1,26 @@
 # Project 1 - Dave Barthly
 
+## Technical Documentation
+The program can be divided into 2 sections which consists of:
+- The `game` object, which contains methods for enemy spawning, and properties for
+things like game score, multpliers,ww and enemy speed.  
+
+- The `listenToGamepad()` function, contains a recursion that updates the state
+of the gamepad every frame. It contains a series of `if` statements that handles
+game logic every frame.
+
+The spawning of the enemies and is controlled by a `setInterval` between
+the two functions. Modifying the parameter for the length of the intervals
+will control the enemy spawn rate.
+
+### Control Flow
+
+The control flow of the game can be generalized as:
+1. The `setInterval` for the main game loop begins.
+2. It invokes the `appendEnemyToDOM` method.
+3. The method creates a new object made by the `CreateEnemyData` constructor.
+and appends the data to a HTML element which is added to the DOM.
+
 ## Pseudo Code
 
 _This pseudo code was written as a reference to help me start off when I first began working, the finished code is significantly in form from what I wrote here. Due to working around bugs, and discovering how certain things behaved._
